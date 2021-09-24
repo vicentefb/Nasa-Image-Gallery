@@ -6,7 +6,12 @@ export default function apod({nn}){
         {nn && nn.map((info) => (
         <div key={info.date} className="Imagecontainer">
             <a>
-                <Image alt="" width={960} priority height={540} src={info.hdurl}/>
+                {info.hdurl.includes(".mov") ? 
+                    <video autoPlay style={{ width: '960', height: '540px' }}>
+                        <source src={info.hdurl} />
+                    </video>
+                    :
+                    <Image alt="" width={960} priority height={540} src={info.hdurl}/>}
                 <div className="center"><strong>{info.title} - {info.date}</strong> </div>
                 <div className="center">{info.explanation} &nbsp;</div>
             </a>
