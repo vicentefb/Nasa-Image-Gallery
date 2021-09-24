@@ -6,7 +6,7 @@ export default function apod({nn}){
         {nn && nn.map((info) => (
         <div key={info.date} className="Imagecontainer">
             <a>
-                {info.hdurl.includes(".mov") ? 
+                {info.hdurl !== undefined && info.hdurl.includes(".mov") ? 
                     <video autoPlay style={{ width: '960', height: '540px' }}>
                         <source src={info.hdurl} />
                     </video>
@@ -24,7 +24,7 @@ export default function apod({nn}){
 
 
 
-export async function getStaticProps(){
+export async function getServerSideProps(){
     const n = await fetch(`https://api.nasa.gov/planetary/apod?api_key=${process.env.NASA_KEY}&&count=5&&thumbs=True`)
     const nn = await n.json()
     //console.log("COUNT" , nn)
