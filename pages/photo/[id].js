@@ -2,7 +2,7 @@ import {useRouter} from 'next/router'
 import Image from 'next/image'
 import Link from 'next/link' 
 
-export default function photo({photo}){
+export default function photo({photo, description}){
     // eslint-disable-next-line react-hooks/rules-of-hooks
     const router = useRouter()
 
@@ -21,7 +21,11 @@ export default function photo({photo}){
                     </>
                 )}
             </div>
+            <div className="center">
+                <p>{description}</p>
+            </div>
             <div className="Imagecontainer">
+            
                 <Link className="homeButton" href="/">
                     <a>
                         <button className="button">
@@ -30,6 +34,7 @@ export default function photo({photo}){
                     </a>
                 </Link>
             </div>
+            
         </div>
     )
 }
@@ -38,13 +43,20 @@ export async function getStaticProps({params}){
     // take the params from below
     const nasa_id = params.id
     const results = await fetch(`https://images-api.nasa.gov/asset/${nasa_id}`)
+    const metadata = await fetch(`https://images-api.nasa.gov/metadata/${nasa_id}`)
 
+    const info = await metadata.json()
+    //console.log(info.location)
+    const details = await (await fetch(info.location)).json()
+    const description = details["XMP:Description"]
+    //console.log("Hello", description)
     // return asset for the preview
     const preview = await results.json()
     const photo = await preview.collection.items[0].href
-    
+    //const details = await preview.collection.items[0].data[0].description
+    //console.log(preview.collection)
     return{
-        props:{photo}
+        props:{photo, description}
     }
 }
 

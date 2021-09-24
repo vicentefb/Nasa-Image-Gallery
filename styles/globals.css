@@ -17,9 +17,9 @@ a {
 }
 .nasaId {
   text-align: center;
-  white-space: nowrap;
   width: 200px;
   overflow: hidden;
+  word-wrap: break-word;
   text-overflow: ellipsis;
 }
 

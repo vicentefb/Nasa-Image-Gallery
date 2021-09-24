@@ -3,11 +3,12 @@ import styles from '../styles/Home.module.css'
 import {useState} from 'react'
 import ImagePreview from '../components/ImagePreview'
 
-export default function Home({items}) {
 
+export default function Home({items}) {
+  
   const[search, setSearch] = useState("")
   const[photos, setPhotos] = useState(items)
-
+  //console.log(photos[0].links[0].href)
   return (
     <div className={styles.container}>
       <Head>
@@ -31,7 +32,7 @@ export default function Home({items}) {
         <div className={styles.fade}>
           <div className={styles.gridContainer}>
             {photos && photos.map((preview) => (
-              <ImagePreview key={preview.data[0].nasa_id} thumbnailUrl={preview.links[0].href} nasaId={preview.data[0].nasa_id}/>
+              <ImagePreview key={preview.data[0].nasa_id} thumbnailUrl={preview.links[0].href} nasaId={preview.data[0].nasa_id} location={preview.data[0].title}/>
             ))}
           </div>
         </div>
@@ -44,7 +45,7 @@ export default function Home({items}) {
 
 export async function getStaticProps(){
   // ask for the first 100 images without any query to have a gallery at home
-  const results = await fetch("https://images-api.nasa.gov/search?media_type=image")
+  const results = await fetch("https://images-api.nasa.gov/search?media_type=image&year_start=2021")
 
   const preivew = await results.json()
   const items = await preivew.collection.items;
