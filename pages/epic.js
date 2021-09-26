@@ -12,26 +12,23 @@ export default function epic() {
       var month = startDate.getMonth() + 1; //months from 1-12
       var day = startDate.getDate();
       var year = startDate.getUTCFullYear();
-      console.log("dia", day);
+
       month = month < 10 ? "0" + month : month;
       day = day < 10 ? "0" + day : day;
       var query_date = year + "-" + month + "-" + day;
-      console.log("query date", query_date);
+
       const result = await fetch(
         `https://epic.gsfc.nasa.gov/api/enhanced/date/${query_date}`
       );
-      const r = await result.json();
-      console.log("esto es r", r);
-      if (r[0] !== undefined) {
-        console.log("HOLA", r[0]);
-        console.log(r[0]["image"]);
-        console.log(r[0]["caption"]);
-        console.log(r[0]["centroid_coordinates"]);
-        var url = `https://epic.gsfc.nasa.gov/archive/enhanced/${year}/${month}/${day}/png/${r[0]["image"]}.png`;
-        var image = { url: url, caption: r[0]["caption"] };
-        console.log("URL", url);
+      const metadata = await result.json();
+      if (metadata[0] !== undefined) {
+        var image_title = metadata[0]["image"];
+        var caption = metadata[0]["caption"];
+        //console.log(metadata[0]["centroid_coordinates"]);
+        var url = `https://epic.gsfc.nasa.gov/archive/enhanced/${year}/${month}/${day}/png/${image_title}.png`;
+        var image = { url: url, caption: caption };
+
         setImage(image);
-        //setQuery(r[0]);
       } else {
         setImage(undefined);
       }
@@ -41,6 +38,15 @@ export default function epic() {
   }, [startDate]);
   return (
     <>
+      <h1 className={styles.title}>EPIC</h1>
+      <p>
+        Daily imagery collected by DSCOVR's Earth Polychromatic Imaging Camera
+        (EPIC) instrument. Uniquely positioned at the Earth-Sun Lagrange point
+        which provides full disc imagery of the Earth.
+      </p>
+      <p>
+        <strong>Select a date</strong>
+      </p>
       <div className="Imagecontainer">
         <DatePicker
           selected={startDate}
@@ -66,16 +72,3 @@ export default function epic() {
     </>
   );
 }
-/*
-export async function getStaticProps() {
-  // ask for the first 100 images without any query to have a gallery at home
-  const results = await fetch(
-    "https://epic.gsfc.nasa.gov/api/enhanced/available"
-  );
-
-  const dates = await results.json();
-
-  return {
-    props: { dates },
-  };
-}*/
