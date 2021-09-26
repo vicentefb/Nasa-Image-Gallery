@@ -11,6 +11,9 @@ export default function Nav() {
         <li>
           <Link href="/apod">Astronomy Picture of the Day</Link>
         </li>
+        <li>
+          <Link href="/epic">Earth Polychromatic Imaging Camera</Link>
+        </li>
       </ul>
     </nav>
   );
