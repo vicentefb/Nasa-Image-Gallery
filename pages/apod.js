@@ -34,7 +34,7 @@ export default function apod({ apod_info }) {
   );
 }
 
-export async function getServerSideProps() {
+export async function getStaticProps() {
   const result = await fetch(
     `https://api.nasa.gov/planetary/apod?api_key=${process.env.NASA_KEY}&&count=5&&thumbs=True`
   );
@@ -42,5 +42,6 @@ export async function getServerSideProps() {
 
   return {
     props: { apod_info },
+    revalidate: 5,
   };
 }
